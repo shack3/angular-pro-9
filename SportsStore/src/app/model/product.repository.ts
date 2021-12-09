@@ -15,9 +15,8 @@ export class ProductRepository {
         });
     }
 
-    getProducts(category?: string): Product[] {
-        if(category==null){
-            console.log(this.products)
+    getProducts(category: string): Product[] {
+        if(category==""){
             return this.products;
         }
         else
