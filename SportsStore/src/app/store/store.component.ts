@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {Product} from "../model/product.model";
 import {ProductRepository} from "../model/product.repository";
 import {Cart} from "../model/cart.model";
-
+import {Router} from "@angular/router";
 
 @Component
 ({
@@ -12,21 +12,20 @@ import {Cart} from "../model/cart.model";
 export class StoreComponent {
 
   public selectedCategory: string = '';
-  public productsPerPage = 3;
+  public productsPerPage:number = 3;
   public selectedPage: number = 1;
   public actualProductsPerPage: number = 3;
 
 
 
-  constructor(private repository: ProductRepository, private cart: Cart) {
+  constructor(private repository: ProductRepository, private cart: Cart, private router:Router) {
   }
 
   get products(): Product[] {
 
-    let pageIndex = (this.selectedPage - 1) * this.productsPerPage;
+    let pageIndex:number = Number((this.selectedPage - 1)) * (this.productsPerPage);
 
-    console.log(this.selectedPage);
-    return this.repository.getProducts(this.selectedCategory).slice(pageIndex, pageIndex + this.productsPerPage);
+    return this.repository.getProducts(this.selectedCategory).slice(pageIndex, Number(this.productsPerPage) + Number(pageIndex));
 
   }
 
@@ -51,10 +50,12 @@ export class StoreComponent {
 
   changeCategory(newCategory: string) {
     this.selectedCategory = newCategory;
+    this.selectedPage = 1;
   }
 
   addProductToCart(product: Product){
     this.cart.addLine(product);
+    this.router.navigateByUrl("/cart")
   }
 
 
